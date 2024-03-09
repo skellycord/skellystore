@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "target": "ES6",
+        "module": "ES2022",
+        "lib": ["DOM", "ES2022"],
+        "moduleResolution": "Bundler",
+        "jsx": "react",
+        "typeRoots": ["./node_modules", "."],
+        "types": ["skellycord-types", "./globals.d.ts"]
+    }
+}

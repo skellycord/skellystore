@@ -1,0 +1,35 @@
+/*[aria-controls="skellycord-tab"][aria-selected="true"] {
+    background-color: var(--brand-500) !important;
+    color: var(--text-normal);
+}
+
+[aria-controls="skellycord-tab"][aria-selected="true"]:hover {
+    color: var(--text-normal);
+}*/
+
+.SC_updatePing { 
+    margin-top: 3%;
+    margin-left: 7%;
+}
+
+.SC_flex {
+    display: flex;
+}
+
+.SC_marginRight8 {
+    margin-right: 8px;
+}
+
+.SC_pluginCard {
+    padding: 10px;
+    
+}
+
+.SC_pluginCard .section {
+    display: flex;
+    align-items: center;
+}
+
+.SC_pluginCard .sectionText {
+    width: 100%;
+}
