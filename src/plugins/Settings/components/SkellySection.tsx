@@ -1,4 +1,3 @@
-import { TabBar } from "@skellycord/components";
 import { React, megaModule } from "@skellycord/webpack/common";
 import General from "./tabs/General";
 import Plugins from "./tabs/Plugins";
@@ -6,15 +5,41 @@ import QuickCSS from "./tabs/QuickCSS";
 import ThemesTab from "./tabs/Themes";
 import UpdaterTab from "./tabs/Updater";
 import { getViaProps } from "@skellycord/webpack";
+import { RELEASE_STATE } from "@skellycord/utils/constants";
+import DevTab from "./tabs/Dev";
 
-const COOL_SECTIONS = ["General", "Plugins", "Themes", "QuickCSS", "Updater"];
+const DUMB_SECTIONS = [
+    {
+        section: "General",
+        id: "general"
+    },
+    {
+        section: "Plugins",
+        id: "plugins"
+    },
+    {
+        section: "Themes",
+        id: "themes"
+    },
+    {
+        section: "QuickCSS",
+        id: "quick_css"
+    },
+    {
+        section: "Updater", 
+        id: "updater"
+    }
+];
+
+if (RELEASE_STATE === "dev") DUMB_SECTIONS.push({
+    section: "Dev",
+    id: "dev"
+});
 
 export default function SkellySection({ settings, context }) {
-    const _TabBar = TabBar();
     const { NumberBadge } = getViaProps("NumberBadge", "IconBadge");
-    const { Text } = megaModule;
-
-    const sectionCopy = COOL_SECTIONS;
+    const { settingsTabBar, settingsTabBarItem } = getViaProps("settingsTabBar", "item");
+    const { Text, TabBar } = megaModule;
     /*React.useEffect(() => {
         sectionCopy[4] = <Text className="SC_marginRight8" style={{ display: "flex" }}>
             Updater
@@ -22,33 +47,51 @@ export default function SkellySection({ settings, context }) {
         </Text>;
     });*/
 
-    const [ currentTab, setTab ] = React.useState(0);
+    const [ currentTab, setTab ] = React.useState(DUMB_SECTIONS[0].id);
     let CurrentTab;
 
-    switch (COOL_SECTIONS[currentTab]) {
-        case "General":  
+    switch (currentTab) {
+        case "general":  
             CurrentTab = General;
             break;
-        case "Plugins": 
+        case "plugins": 
             CurrentTab = Plugins;
             break;
-        case "Themes": 
+        case "themes": 
             CurrentTab = ThemesTab;
             break;
-        case "QuickCSS":
+        case "quick_css":
             CurrentTab = QuickCSS;
             break;
-        case "Updater":
+        case "updater":
             CurrentTab = UpdaterTab;
             break;
+        case "dev":
+            CurrentTab = DevTab;
     }
 
     return <>
-        <_TabBar 
-            items={sectionCopy} 
-            initTab={currentTab} 
-            onChange={v => setTab(sectionCopy.findIndex(s => s === v))} 
-        />
+        <TabBar
+            className={settingsTabBar}
+            look="brand"
+            type="top"
+            selectedItem={currentTab}
+            onItemSelect={v => setTab(
+                DUMB_SECTIONS[
+                    DUMB_SECTIONS.findIndex(val => v === val.id)
+                ].id
+            )}
+        >
+            {
+                DUMB_SECTIONS.map(v => <TabBar.Item
+                    className={settingsTabBarItem}
+                    id={v.id}
+                >
+                    { v.section }
+                </TabBar.Item>)
+            }
+        </TabBar>
+
 
         <CurrentTab {...{ settings, context }} />
     </>;

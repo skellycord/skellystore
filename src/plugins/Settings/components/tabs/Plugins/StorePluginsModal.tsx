@@ -3,7 +3,7 @@ import { getViaProps } from "@skellycord/webpack";
 import { React, css, megaModule } from "@skellycord/webpack/common";
 import joinClassNames from "@skellycord/utils/joinClassNames";
 import PluginModal from "./PluginModal";
-import { CORE_STORE } from "@skellycord/utils/constants";
+import { CORE_STORE, SETTINGS_KEY } from "@skellycord/utils/constants";
 import { settings } from "@skellycord/utils";
 
 export default function StorePluginsModal({ store, modalProps }: { store: PluginStore, modalProps: any }) {
@@ -20,7 +20,7 @@ export default function StorePluginsModal({ store, modalProps }: { store: Plugin
     } = megaModule;
 
     const { SettingsIcon } = getViaProps("SettingsIcon");
-    const skellycordSettings = settings.openConfig(CORE_STORE);
+    const skellycordSettings = settings.openConfig(SETTINGS_KEY, false);
     const storePlugins = skellycordSettings.get("stores", {})[store.name];
 
     return <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>

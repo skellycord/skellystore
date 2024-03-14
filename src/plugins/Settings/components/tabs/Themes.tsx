@@ -5,13 +5,14 @@ import { React, megaModule } from "@skellycord/webpack/common";
 export default function ThemesTab({ settings }) {
     const { 
         Text,
-        TextArea
+        TextArea,
+        FormTitle
     } = megaModule;
 
     const [ links, setLinks ] = React.useState(settings.get("webThemes", ""));
 
     return <>
-        <Text variant="heading-lg/semibold">Online Themes</Text>
+        <FormTitle>Online Themes</FormTitle>
         <TextArea
             style={{ fontSize: "13px" }}
             value={links}

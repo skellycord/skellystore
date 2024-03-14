@@ -10,10 +10,11 @@ export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; mo
         ModalHeader,
         ModalContent,
         ModalSize,
+        FormSwitch,
         Text
     } = megaModule;
 
-    let pluginSettings;
+    let pluginSettings: settings;
     if (plugin.settings) pluginSettings = settings.openConfig(plugin.name);
 
     return <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
@@ -31,8 +32,12 @@ export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; mo
             <Text>Author: { stores[plugin.from].author }</Text>
             { plugin.settings && plugin.settings?.length ? (plugin.settings as unknown as SettingsModel[]).map(s => {
                 switch (s.type) {
-                    case SettingsTypes.STRING:
-                        return
+                    case SettingsTypes.BOOLEAN: return <FormSwitch 
+                        note={s.description}
+                        value={pluginSettings.get(s.key, s.defaultValue)}
+                    >
+                        { s.displayName }
+                    </FormSwitch>;
                 }
             }) : <Text>No settings :(</Text>}
         </ModalContent>

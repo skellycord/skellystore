@@ -9,12 +9,13 @@ import SkellySection, { ContextMenuSection } from "./components/SkellySection";
 import { FluxDispatcher } from "@skellycord/webpack/common/utils";
 import VersionText from "./components/VersionText";
 import injectCss from "@skellycord/utils/injectCss";
+import { SETTINGS_KEY } from "@skellycord/utils/constants";
 
 injectCss("https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs/editor/editor.main.css");
 
 export const name = "SkellycordSettings";
 export const description = "Shows you this super cool settings page.";
-const modSettings = settings.openConfig(name);
+const modSettings = settings.openConfig(SETTINGS_KEY);
 
 export const patches: Plugin["patches"] = [
     {

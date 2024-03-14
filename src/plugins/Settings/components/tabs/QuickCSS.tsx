@@ -15,7 +15,10 @@ export default function QuickCSS({ settings }) {
             container,
             {
                 theme: `vs-${themeContext.theme}`,
+                codeLens: false,
+                contextmenu: true,
                 language: "css",
+                colorDecorators: true,
                 value: quickCss,
                 automaticLayout: true,
             }
