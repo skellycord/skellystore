@@ -7,6 +7,7 @@ import InfoBox from "./InfoBox";
 
 export const name = "SkellyBoundary";
 export const description = "ErrorBoundary tweak that shows error.";
+export const patches = [];
 export async function start() {
     const ErrorBoundary = await lazy.getViaPrototypes("triggerSoftCrash", "_handleSubmitReport");
 
