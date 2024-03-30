@@ -4,7 +4,7 @@ import { join } from "path";
 export const distPath = join(import.meta.url, "..", "..", "dist").replace("file:", "");
 if (!existsSync(distPath)) mkdirSync(distPath);
 export const pluginsPath = join(import.meta.url, "..", "..", "src", "plugins").replace("file:", "");
-const PLUGIN_INDEX_RE = new RegExp(`plugins\/(${readdirSync(pluginsPath).join("|")})\/index.(j|t)s(x)*$`);
+const PLUGIN_INDEX_RE = new RegExp(`plugins\/(${readdirSync(pluginsPath).join("|")})\/index.(mjs|(j|t))s(x)*$`);
 
 // ah the cumcordery of it all
 /** @type {import("esbuild").PluginBuild} */
