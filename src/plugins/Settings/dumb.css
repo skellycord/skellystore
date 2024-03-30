@@ -22,10 +22,19 @@
 
 .SC_pluginCard {
     padding: 10px;
-    
 }
 
+.SC_pluginCard .buttons {
+    float: right;
+    display: inline-flex;
+    align-items: center;
+}
 .SC_pluginCard .section {
+    display: flex;
+    align-items: center;
+}
+
+.SC_pluginCard .storeName {
     display: flex;
     align-items: center;
 }

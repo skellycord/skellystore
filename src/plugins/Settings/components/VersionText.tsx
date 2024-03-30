@@ -4,9 +4,10 @@ import { React, megaModule } from "@skellycord/webpack/common";
 
 export default function VersionText() {
     const { Text } = megaModule;
+    const { line } = getViaProps("line", "appArch");
      
     return <Text
-        className={getViaProps("line", "appArch").line}
+        className={line}
         color="text-muted"
         variant="text-xs/normal"
     >

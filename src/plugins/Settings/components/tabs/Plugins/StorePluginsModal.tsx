@@ -3,8 +3,9 @@ import { getViaProps } from "@skellycord/webpack";
 import { React, css, megaModule } from "@skellycord/webpack/common";
 import joinClassNames from "@skellycord/utils/joinClassNames";
 import PluginModal from "./PluginModal";
-import { CORE_STORE, SETTINGS_KEY } from "@skellycord/utils/constants";
-import { settings } from "@skellycord/utils";
+import { CORE_STORE, MOD_SETTINGS, MOD_STORAGE_KEY } from "@skellycord/utils/constants";
+import { openStorage } from "@skellycord/utils/storage";
+import ReloadWarningModal from "./ReloadWarningModal";
 
 export default function StorePluginsModal({ store, modalProps }: { store: PluginStore, modalProps: any }) {
     const {
@@ -16,13 +17,15 @@ export default function StorePluginsModal({ store, modalProps }: { store: Plugin
         ModalContent,
         ModalCloseButton,
         ModalSize,
-        Text
+        Text,
+        AnimatedDots
     } = megaModule;
 
     const { SettingsIcon } = getViaProps("SettingsIcon");
-    const skellycordSettings = settings.openConfig(SETTINGS_KEY, false);
-    const storePlugins = skellycordSettings.get("stores", {})[store.name];
-
+    const skellycordSettings = openStorage<typeof MOD_SETTINGS>(MOD_STORAGE_KEY);
+    const storePlugins = skellycordSettings.stores[store.name];
+    
+    // const getP
     return <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
         <ModalHeader separator={false}>
             <div style={{ display: "block" }}>
@@ -49,12 +52,15 @@ export default function StorePluginsModal({ store, modalProps }: { store: Plugin
                                 value={pluginLoaded} 
                                 disabled={store.name === CORE_STORE} 
                                 onChange={(_, value) => {
-                                    const lol = skellycordSettings.get("stores", {});
+                                    const lol = skellycordSettings.stores;
                                     lol[store.name] = storePlugins;
 
                                     storePlugins[d.name] = value;
                                     if (value) load(d);
-                                    else unload(d.name);
+                                    else {
+                                        unload(d.name);
+                                        if (d?.patches?.length) openModal(props => <ReloadWarningModal modalProps={props} />);
+                                    }
                                     setPluginLoaded(value);
                                 }}
                             />

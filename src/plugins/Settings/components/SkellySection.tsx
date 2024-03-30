@@ -92,7 +92,6 @@ export default function SkellySection({ settings, context }) {
             }
         </TabBar>
 
-
         <CurrentTab {...{ settings, context }} />
     </>;
 }

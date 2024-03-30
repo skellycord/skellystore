@@ -16,6 +16,7 @@ export default function GeneralTab({ context }) {
         ButtonColors,
         ButtonSizes
     } = megaModule;
+
     const { emptyState, emptyStateHeader, emptyStateSubtext } = getViaProps("skuCard", "promotionIcon");
     const { buttonContainer } = getViaProps("buttonContainer", "reminderTooltip", "tooltipContent");
     const { INVITE_BROWSER: { handler: openInviteWindow } } = getViaProps("INVITE_BROWSER");
@@ -45,7 +46,7 @@ export default function GeneralTab({ context }) {
                                     size={ButtonSizes.SMALL}
                                     disabled={true}
                                 >
-                        Join Skellycord Server
+                                    Join Skellycord Server
                                 </Button>
                             }
                         </Tooltip>
@@ -57,7 +58,7 @@ export default function GeneralTab({ context }) {
                                 openInviteWindow({ args: { code: GUILD_DATA.invite } });
                             }}
                         >
-                        Join Skellycord Server
+                            Join Skellycord Server
                         </Button>
                 }
                 
@@ -68,7 +69,7 @@ export default function GeneralTab({ context }) {
                         vineboom.play();
                     }}
                 >
-                        Play Vineboom.mp3
+                    Play Vineboom.mp3
                 </Button>
                 <Button 
                     size={ButtonSizes.SMALL}
@@ -76,7 +77,7 @@ export default function GeneralTab({ context }) {
                     color={ButtonColors.GREEN} 
                     className={margins.marginBottom8}
                 >
-                        Source Code
+                    Source Code
                 </Button>
             </div>
         </Card>

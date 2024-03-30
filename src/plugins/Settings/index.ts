@@ -2,28 +2,37 @@ import { after } from "@skellycord/utils/patcher";
 import { Plugin } from "@skellycord/apis/plugins";
 import { filters, lazy, getViaProps, getViaSource } from "@skellycord/webpack";
 import { React, megaModule } from "@skellycord/webpack/common";
-import { settings } from "@skellycord/utils";
+import { openStorage } from "@skellycord/utils/storage";
 import Paw from "./components/Paw";
 import css from "./dumb.css";
 import SkellySection, { ContextMenuSection } from "./components/SkellySection";
 import { FluxDispatcher } from "@skellycord/webpack/common/utils";
 import VersionText from "./components/VersionText";
 import injectCss from "@skellycord/utils/injectCss";
-import { SETTINGS_KEY } from "@skellycord/utils/constants";
+import { MOD_STORAGE_KEY } from "@skellycord/utils/constants";
 
 injectCss("https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs/editor/editor.main.css");
 
 export const name = "SkellycordSettings";
 export const description = "Shows you this super cool settings page.";
-const modSettings = settings.openConfig(SETTINGS_KEY);
+const modSettings = openStorage(MOD_STORAGE_KEY);
 
 export const patches: Plugin["patches"] = [
     {
-        find: ".versionHash",
+        find: /.versionHash/,
         replacements: [
             {
                 target: /}\)," "/,
                 replacement: "}), \" \", $self.makeSectionText()"
+            }
+        ]
+    },
+    {
+        find: "\"console\"in",
+        replacements: [
+            {
+                target: /switch\((.*)\){(.*)}/,
+                replacement: "switch($1){}"
             }
         ]
     },
@@ -35,7 +44,7 @@ export const patches: Plugin["patches"] = [
                 target: /(.\.)tip,children:(.)/,
                 replacement: () => {
                     let componentContent;
-                    if (modSettings.get("firstStart", true)) componentContent = "['Skellycord is in your discord now?  ',$self.makePaw()]";
+                    if (modSettings.firstStart) componentContent = "['Skellycord is in your discord now?  ',$self.makePaw()]";
                     else componentContent = "$2";
 
                     return `$1tip,children:${componentContent}`;
@@ -43,29 +52,26 @@ export const patches: Plugin["patches"] = [
             }
         ]
     },
-    /*{
+    {
         find: "navId:\"user-settings-cog\"",
         replacements: [
             {
                 target: /(.)=\(0,(.)\.default\)\(\)\.filter\((.*)\)\.filter\((.*)\);/,
-                replacement: () => {
-                    return `$1=(0,$2.default)().filter($3).filter($4);$1.splice(0, 0, {
-                        ...$self.SECTION_MIN,
-                        element: $self.makePaw()
-                    });`
-                }
+                replacement: "$1=(0,$2.default)().filter($3).filter($4);$1.splice(0, 0, {" +
+                "...$self.SECTION_MIN," +
+                "element: $self.makePaw()" +
+                "});"
             }
         ]
-    }*/
+    }
 ];
 
 export async function start() {
-    await lazy.getViaProps("createToast");
-    const { createToast, showToast } = megaModule;
+    const { createToast, showToast } = megaModule ?? await lazy.getViaProps("createToast", "showToast");
 
-    if (modSettings.get("firstStart", true)) {
+    if (modSettings.firstStart) {
         FluxDispatcher.subscribe("CONNECTION_OPEN", () => showToast(createToast("Skellycord Installed!")));
-        modSettings.set("firstStart", false);
+        modSettings.firstStart = false;
     }
 
     const settingsSect = await lazy.getViaPrototypes("getPredicateSections", "renderSidebar");

@@ -6,10 +6,9 @@ import { joinClassNames } from "@skellycord/utils";
 import PluginModal from "./StorePluginsModal";
 import { CORE_STORE } from "@skellycord/utils/constants";
 import { User } from "discord-types/general";
-import { UserStore } from "@skellycord/webpack/common/stores";
+import { colors, variables } from "@skellycord/webpack/common/css";
 
-export default function StoreCard({ store }: { store: PluginStore }) {
-    const [ pluginsHidden, setHidden ] = React.useState(true);
+export default function StoreCard({ store, isNew }: { store: PluginStore, isNew: boolean }) {
     const [ author, setAuthor ] = React.useState<User>();
 
     React.useEffect(() => {
@@ -25,39 +24,83 @@ export default function StoreCard({ store }: { store: PluginStore }) {
 
     const { 
         Text, 
-        Card, 
+        Card,
+        CardTypes,
         Button, 
         Tooltip,
+        Clickable,
         Modal,
         Avatar,
-        openModal
+        openModal,
+        FormDivider,
+        AnimatedDots
     } = megaModule;
 
-    const { cardPrimary } = getViaProps("cardPrimary");
+    // const { TEXT_NORMAL } = getViaProps("TEXT_NORMAL", "TOAST_BGS")
+    const { clickable, iconWrapper } = getViaProps("clickable", "iconWrapper");
     const { getUserAvatarURL } = getViaProps("getUserAvatarURL");
     const { openUserProfileModal } = getViaProps("openUserProfileModal", "closeUserProfileModal");
-    const { connectedAccountVerifiedIcon } = getViaProps("connectedAccountVerifiedIcon");
-    const { flowerStarContainer } = getViaProps("flowerStarContainer");
-    const formStyles = getViaProps("formNoticeTitle");
-    const { previewHeader } = getViaProps("previewHeader");
+    const { TextBadge } = getViaProps("TextBadge", "NumberBadge");
+    const { EyeIcon } = getViaProps("EyeIcon");
+    const { TrashIcon } = getViaProps("TrashIcon");
 
-    return <Card className={joinClassNames(css.margins.marginBottom8, "SC_pluginCard")} type={cardPrimary}>
-            <Button 
-                style={{ float: "right" }}
-                onClick={() => openModal(props => <PluginModal modalProps={props} store={store}/>)}
-            >
-                Show Plugins
-            </Button>
-            <Text 
-                variant="text-lg/semibold" 
-                className={css.margins.marginBottom4}
-            >
-                { store.name } { store.name === CORE_STORE ? <Paw /> : null }
-            </Text>
+    return <Card editable className={joinClassNames(css.margins.marginBottom8, "SC_pluginCard")} type={CardTypes.PRIMARY}>
+            <div className="buttons">
+                <Tooltip text="View Plugins">
+                    {
+                        (tooltipAttr) => <Clickable
+                            { ...tooltipAttr }
+                            className={joinClassNames("SC_marginRight8", clickable, iconWrapper)}
+                            onClick={() => openModal(props => <PluginModal modalProps={props} store={store}/>)}
+                        >
+                            <EyeIcon />
+                        </Clickable>
+                    }
+                </Tooltip>
+
+                <Tooltip text="Remove Store">
+                    {
+                        (tooltipAttr) => <Clickable
+                            { ...tooltipAttr }
+                            className={joinClassNames(clickable, iconWrapper)}
+                        >
+                        <TrashIcon />
+                    </Clickable>
+                    }
+                </Tooltip>                
+            </div>
+            
+            <div className="storeName">
+                <Text 
+                    variant="text-lg/semibold" 
+                    className={joinClassNames(css.margins.marginBottom4, "SC_marginRight8")}
+                >
+                    { store.name }
+                </Text>
+                { store.name === CORE_STORE ? 
+                    <Tooltip text="This store serves as the core of skellycord">
+                        {
+                            (tooltipAttr) => <div
+                                { ...tooltipAttr }
+                                className="SC_marginRight8"
+                                style={{ color: variables.TEXT_NORMAL }}
+                                >
+                                    <Paw /> 
+                                </div>
+                        }
+                    </Tooltip>
+                : null }
+                { isNew ? <TextBadge 
+                    className="SC_marginRight8"
+                    color={colors.BRAND_500}
+                    text="New"
+                /> : null }
+            </div>
             
             { author ? <div 
-                style={{ display: "flex" }}
-                onClick={() => openUserProfileModal({ userId: author.id })}
+                style={{ 
+                    display: "flex"
+                }}
             >
                 <Avatar
                     className="SC_marginRight8"
@@ -65,8 +108,15 @@ export default function StoreCard({ store }: { store: PluginStore }) {
                     src={getUserAvatarURL(author)}
                 />
                         
-                <Text variant="text-sm/normal">{ author.username }</Text>
+                <Text 
+                    variant="text-sm/normal" 
+                    style={{ cursor: "pointer" }}
+                    onClick={() => openUserProfileModal({ userId: author.id })}
+                >
+                    { author.username }
+                </Text>
             </div> : null }
+            
         </Card>;
 }
 

@@ -1,5 +1,6 @@
 import { Plugin, SettingsModel, SettingsTypes, stores } from "@skellycord/apis/plugins";
-import { settings } from "@skellycord/utils";
+import { openStorage, StorageObject } from "@skellycord/utils/storage";
+import { MOD_SETTINGS, MOD_STORAGE_KEY } from "@skellycord/utils/constants";
 import { getViaProps } from "@skellycord/webpack";
 import { React, megaModule } from "@skellycord/webpack/common";
 
@@ -14,8 +15,8 @@ export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; mo
         Text
     } = megaModule;
 
-    let pluginSettings: settings;
-    if (plugin.settings) pluginSettings = settings.openConfig(plugin.name);
+    let pluginSettings: StorageObject<typeof MOD_SETTINGS>;
+    if (plugin.settings) pluginSettings = openStorage(MOD_STORAGE_KEY);
 
     return <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
         <ModalHeader separator={false}>
@@ -30,8 +31,9 @@ export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; mo
         <ModalContent>
             <Text>Desciption: { plugin.description }</Text>
             <Text>Author: { stores[plugin.from].author }</Text>
-            { plugin.settings && plugin.settings?.length ? (plugin.settings as unknown as SettingsModel[]).map(s => {
-                switch (s.type) {
+            <Text>Patches: { plugin.patches?.length ?? 0 }</Text>
+            { /*plugin.settings && plugin.settings?.length ? (plugin.settings as unknown as SettingsModel[]).map(s => {
+                /*switch (s.type) {
                     case SettingsTypes.BOOLEAN: return <FormSwitch 
                         note={s.description}
                         value={pluginSettings.get(s.key, s.defaultValue)}
@@ -39,7 +41,7 @@ export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; mo
                         { s.displayName }
                     </FormSwitch>;
                 }
-            }) : <Text>No settings :(</Text>}
+            }) : <Text>No settings :(</Text>*/}
         </ModalContent>
     </ModalRoot>;
 }
