@@ -14,6 +14,6 @@
 		"esbuild": "^0.20.1",
 		"esbuild-monaco-editor-plugin": "^0.1.1",
 		"monaco-editor": "^0.46.0",
-		"skellycord-types": "^1.0.13"
+		"skellycord-types": "^1.1.4"
 	}
 }
