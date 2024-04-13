@@ -1,19 +1,16 @@
 import { reloadWebThemes } from "@skellycord/apis/themes";
-import { getViaProps } from "@skellycord/webpack";
+import { joinClassNames } from "@skellycord/utils";
 import { React, megaModule } from "@skellycord/webpack/common";
-import { colors } from "@skellycord/webpack/common/css";
+import { margins } from "@skellycord/webpack/common/css";
+import ThemeStatusCard from "./ThemeStatusCard";
+import { themes } from "@skellycord/apis";
 
 export default function ThemesTab({ settings }) {
     const { 
-        Text,
-        Card,
-        CardTypes,
         TextArea,
-        FormTitle
+        FormTitle,
+        FormDivider
     } = megaModule;
-
-    const { CircleCheckIcon } = getViaProps("CircleCheckIcon");
-    const { CircleExclamationPointIcon } = getViaProps("CircleExclamationPointIcon");
 
     const [ links, setLinks ] = React.useState(settings.webThemes);
 
@@ -30,11 +27,8 @@ export default function ThemesTab({ settings }) {
             }}
         />
 
-        { settings.webThemes.split("\n").filter(d => d !== "").map(link => <Card className="SC_pluginCard">
-            {/* @ts-ignore update discord-types */}
-            <CircleCheckIcon fill="currentColor" style={{ color: colors.GREEN_500 }} />
-            <Text>{ link }</Text>
-          </Card>)
-        }
+        <FormDivider className={joinClassNames(margins.marginBottom20, margins.marginTop20)} />
+
+        { themes.linkThemes.map(theme => <ThemeStatusCard theme={theme} />) }
     </>;
 }
