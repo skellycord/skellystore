@@ -3,7 +3,7 @@ import { Plugin } from "@skellycord/apis/plugins";
 import { filters, lazy, getViaProps, getViaSource } from "@skellycord/webpack";
 import { React, megaModule } from "@skellycord/webpack/common";
 import { openStorage } from "@skellycord/utils/storage";
-import Paw from "./components/Paw";
+import Paw, { SkellycordLogo } from "./components/Paw";
 import css from "./dumb.css";
 import SkellySection, { ContextMenuSection } from "./components/SkellySection";
 import { FluxDispatcher } from "@skellycord/webpack/common/utils";
@@ -56,12 +56,9 @@ export const patches: Plugin["patches"] = [
         find: "navId:\"user-settings-cog\"",
         replacements: [
             {
-                target: /(.)=\(0,(.)\.default\)\(\)\.filter\((.*)\)\.filter\((.*)\);/,
-                replacement: "$1=(0,$2.default)().filter($3).filter($4);$1.splice(0, 0, {" +
-                "...$self.SECTION_MIN," +
-                "element: $self.makePaw()" +
-                "});"
-            }
+                target: /null==(.*);/,
+                replacement: "null==$1.map($self.testMap);"
+            },
         ]
     }
 ];
@@ -84,7 +81,7 @@ export async function start() {
                 settings: modSettings,
                 context: ts
             }),
-            icon: makePaw()
+            icon: React.createElement(SkellycordLogo)
         },
         DIVIDER);
 
@@ -107,6 +104,11 @@ export function makeSectionText() {
 
 export function makePaw() {
     return React.createElement(Paw);
+}
+
+export function testMap() {
+    console.log(arguments);
+    return arguments;
 }
 
 const DIVIDER = { section: "DIVIDER" };
