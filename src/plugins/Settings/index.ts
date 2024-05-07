@@ -27,7 +27,7 @@ export const patches: Plugin["patches"] = [
             }
         ]
     },
-    {
+    /*{
         find: "\"console\"in",
         replacements: [
             {
@@ -35,7 +35,7 @@ export const patches: Plugin["patches"] = [
                 replacement: "switch($1){}"
             }
         ]
-    },
+    },*/
     {
         // predicate: () => settings.get("firstStart", true),
         find: ".default.Messages.LOADING_DID_YOU_KNOW",
@@ -56,7 +56,7 @@ export const patches: Plugin["patches"] = [
         find: "navId:\"user-settings-cog\"",
         replacements: [
             {
-                target: /null==(.*);/,
+                target: /null==(.*)\.map\(.*\);/,
                 replacement: "null==$1.map($self.testMap);"
             },
         ]

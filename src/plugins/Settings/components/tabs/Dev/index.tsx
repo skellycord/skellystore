@@ -60,10 +60,12 @@ export default function DevTab() {
             onChange={v => setSourceInputVal(v)}
         />
 
-        <Text>{ 
+        <Text>Type: {typeof source} <br/> { 
             !sourceError ?
-            typeof source === "object" ? JSON.stringify(source, null, "\n") : String(source) :
+            (typeof source === "object" ? JSON.stringify(source, null, "\n") : String(source)) :
             ""
         }</Text>
+
+        <Button onClick={()=>console.log("Source finder: ", source)}>Print in console</Button>
     </>;
 }

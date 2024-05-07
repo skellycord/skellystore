@@ -12,16 +12,20 @@ export default function StorePluginsModal({ store, modalProps }: { store: Plugin
         openModal,
         Card,
         Checkbox,
+        Clickable,
         ModalRoot,
         ModalHeader,
         ModalContent,
         ModalCloseButton,
         ModalSize,
         Text,
+        Tooltip,
         AnimatedDots
     } = megaModule;
 
+    
     const { SettingsIcon } = getViaProps("SettingsIcon");
+    const { clickable, iconWrapper } = getViaProps("clickable", "iconWrapper");
     const skellycordSettings = openStorage<typeof MOD_SETTINGS>(MOD_STORAGE_KEY);
     const storePlugins = skellycordSettings.stores[store.name];
     
@@ -46,7 +50,15 @@ export default function StorePluginsModal({ store, modalProps }: { store: Plugin
                     return <Card key={d.name} className={joinClassNames("SC_pluginCard", css.margins.marginTop8)}>
                         <div className="section">
                             <Text className="sectionText">{ d.name }</Text>
-                            <SettingsIcon onClick={() => openModal(props => <PluginModal modalProps={props} plugin={d} />)} className="SC_marginRight8" />
+                            <Clickable className={joinClassNames("SC_marginRight8", clickable, iconWrapper)}>
+                                <Tooltip text="View settings">
+                                    {
+                                        (tooltipAttr) => <SettingsIcon { ...tooltipAttr } onClick={() => openModal(props => <PluginModal modalProps={props} plugin={d} />)} className="SC_marginRight8" />
+                                    }
+                                </Tooltip>
+                                
+                            </Clickable>
+                            
                             <Checkbox
                                 type={Checkbox.Types.INVERTED}
                                 value={pluginLoaded} 

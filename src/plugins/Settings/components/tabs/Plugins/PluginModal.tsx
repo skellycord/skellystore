@@ -18,7 +18,7 @@ export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; mo
     let pluginSettings: StorageObject<typeof MOD_SETTINGS>;
     if (plugin.settings) pluginSettings = openStorage(MOD_STORAGE_KEY);
 
-    return <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
+    return <ModalRoot {...modalProps} size={ModalSize.LARGE}>
         <ModalHeader separator={false}>
             <Text tag="h1" variant="heading-lg/semibold">{ plugin.name }</Text>
 
@@ -32,16 +32,7 @@ export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; mo
             <Text>Desciption: { plugin.description }</Text>
             <Text>Author: { stores[plugin.from].author }</Text>
             <Text>Patches: { plugin.patches?.length ?? 0 }</Text>
-            { /*plugin.settings && plugin.settings?.length ? (plugin.settings as unknown as SettingsModel[]).map(s => {
-                /*switch (s.type) {
-                    case SettingsTypes.BOOLEAN: return <FormSwitch 
-                        note={s.description}
-                        value={pluginSettings.get(s.key, s.defaultValue)}
-                    >
-                        { s.displayName }
-                    </FormSwitch>;
-                }
-            }) : <Text>No settings :(</Text>*/}
+            { plugin.settings ? <plugin.settings storage={openStorage(plugin.name)} /> : <Text>TODO: Replace with lonely wumpus</Text>}
         </ModalContent>
     </ModalRoot>;
 }
