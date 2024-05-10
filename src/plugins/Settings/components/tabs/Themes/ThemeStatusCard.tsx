@@ -1,5 +1,8 @@
+import { themes } from "@skellycord/apis";
 import { Theme } from "@skellycord/apis/themes";
 import { joinClassNames } from "@skellycord/utils";
+import { MOD_SETTINGS, MOD_STORAGE_KEY } from "@skellycord/utils/constants";
+import { openStorage } from "@skellycord/utils/storage";
 import { getViaProps } from "@skellycord/webpack";
 import { React, megaModule } from "@skellycord/webpack/common";
 import { colors, flexClasses, margins } from "@skellycord/webpack/common/css";
@@ -9,7 +12,7 @@ enum ThemeStatus {
     OK,
     FAIL
 }
-export default function ThemeStatusCard({ theme }: { theme: Theme }) {
+export default function ThemeStatusCard({ theme, themeIndex }: { theme: Theme, themeIndex: number }) {
     const { 
         Card, 
         Text,
@@ -27,7 +30,7 @@ export default function ThemeStatusCard({ theme }: { theme: Theme }) {
         async function detectThemeLoad() {
             if (theme.local) { return; } // todo: local theme logic
 
-            const ref = (theme.element as HTMLLinkElement).href;
+            const ref = findHref(theme, themeIndex);
             if (ref.includes("discord.com/")) return setThemeLoaded(ThemeStatus.FAIL);
             const req = await fetch(ref);
 
@@ -67,9 +70,13 @@ export default function ThemeStatusCard({ theme }: { theme: Theme }) {
                     <Status { ...StatusProps} />
                 </div>
                 <div>
-                    <FormTitle className={margins.marginTop4}>{ (theme.element as HTMLLinkElement).href ?? theme.element.textContent }</FormTitle>
+                    <FormTitle className={margins.marginTop4}>{ findHref(theme, themeIndex) }</FormTitle>
                 </div>
             </FormWrapperIdk>
         </Card>
     </div>;
+}
+
+function findHref(theme: Theme, i: number) {
+    return theme?.element?.href ?? openStorage(MOD_STORAGE_KEY, MOD_SETTINGS).webThemes.split("\n")[i];
 }
