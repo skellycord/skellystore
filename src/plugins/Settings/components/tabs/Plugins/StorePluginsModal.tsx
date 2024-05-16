@@ -27,7 +27,8 @@ export default function StorePluginsModal({ store, modalProps }: { store: Plugin
     const { SettingsIcon } = getViaProps("SettingsIcon");
     const { clickable, iconWrapper } = getViaProps("clickable", "iconWrapper");
     const skellycordSettings = openStorage<typeof MOD_SETTINGS>(MOD_STORAGE_KEY);
-    const storePlugins = skellycordSettings.stores[store.name];
+    const storeCopy = skellycordSettings.stores;
+    const storePlugins = storeCopy[store.name];
     
     // const getP
     return <ModalRoot {...modalProps} size={ModalSize.MEDIUM}>
@@ -64,10 +65,8 @@ export default function StorePluginsModal({ store, modalProps }: { store: Plugin
                                 value={pluginLoaded} 
                                 disabled={store.name === CORE_STORE} 
                                 onChange={(_, value) => {
-                                    const lol = skellycordSettings.stores;
-                                    lol[store.name] = storePlugins;
-
                                     storePlugins[d.name] = value;
+                                    skellycordSettings.stores = storeCopy;
                                     if (value) load(d);
                                     else {
                                         unload(d.name);
