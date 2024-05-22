@@ -4,36 +4,42 @@ import Plugins from "./tabs/Plugins";
 import QuickCSS from "./tabs/QuickCSS";
 import ThemesTab from "./tabs/Themes";
 import UpdaterTab from "./tabs/Updater";
+import DevTab from "./tabs/Dev";
 import { getViaProps } from "@skellycord/webpack";
 import { RELEASE_STATE } from "@skellycord/utils/constants";
-import DevTab from "./tabs/Dev";
 
 const DUMB_SECTIONS = [
     {
         section: "General",
-        id: "general"
+        id: "general",
+        element: General
     },
     {
         section: "Plugins",
-        id: "plugins"
+        id: "plugins",
+        element: Plugins
     },
     {
         section: "Themes",
-        id: "themes"
+        id: "themes",
+        element: ThemesTab
     },
     {
         section: "QuickCSS",
-        id: "quick_css"
+        id: "quick_css",
+        element: QuickCSS
     },
     {
         section: "Updater", 
-        id: "updater"
+        id: "updater",
+        element: UpdaterTab
     }
 ];
 
 if (RELEASE_STATE === "dev") DUMB_SECTIONS.push({
     section: "Dev",
-    id: "dev"
+    id: "dev",
+    element: DevTab
 });
 
 export default function SkellySection({ settings, context }) {
@@ -48,27 +54,7 @@ export default function SkellySection({ settings, context }) {
     });*/
 
     const [ currentTab, setTab ] = React.useState(DUMB_SECTIONS[0].id);
-    let CurrentTab;
-
-    switch (currentTab) {
-        case "general":  
-            CurrentTab = General;
-            break;
-        case "plugins": 
-            CurrentTab = Plugins;
-            break;
-        case "themes": 
-            CurrentTab = ThemesTab;
-            break;
-        case "quick_css":
-            CurrentTab = QuickCSS;
-            break;
-        case "updater":
-            CurrentTab = UpdaterTab;
-            break;
-        case "dev":
-            CurrentTab = DevTab;
-    }
+    const CurrentTab = DUMB_SECTIONS[DUMB_SECTIONS.findIndex(val => currentTab === val.id)].element;
 
     return <>
         <TabBar
@@ -94,16 +80,4 @@ export default function SkellySection({ settings, context }) {
 
         <CurrentTab {...{ settings, context }} />
     </>;
-}
-
-export function ContextMenuSection() {
-    const { MenuItem, MenuGroup } = megaModule;
-    const { open } = getViaProps("open", "init", "saveAccountChanges");
-    return <MenuGroup>
-        <MenuItem
-            id="bork"
-            label="Skellycord"
-            action={()=>open("Skellycord")}
-        />
-    </MenuGroup>;
 }

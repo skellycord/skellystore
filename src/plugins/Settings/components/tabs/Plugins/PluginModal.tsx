@@ -3,6 +3,7 @@ import { openStorage, StorageObject } from "@skellycord/utils/storage";
 import { MOD_SETTINGS, MOD_STORAGE_KEY } from "@skellycord/utils/constants";
 import { getViaProps } from "@skellycord/webpack";
 import { React, megaModule } from "@skellycord/webpack/common";
+import { margins } from "@skellycord/webpack/common/css";
 
 export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; modalProps: any }) {
     const { 
@@ -32,7 +33,11 @@ export default function PluginModal({ plugin, modalProps }: { plugin: Plugin; mo
             <Text>Desciption: { plugin.description }</Text>
             <Text>Author: { stores[plugin.from].author }</Text>
             <Text>Patches: { plugin.patches?.length ?? 0 }</Text>
-            { plugin.settings ? <plugin.settings storage={openStorage(plugin.name)} /> : <Text>TODO: Replace with lonely wumpus</Text>}
+            <div className={margins.marginTop20}>
+                {plugin.settings ? 
+                <plugin.settings storage={openStorage(plugin.name)} /> : 
+                <Text>TODO: Replace with lonely wumpus</Text>}
+            </div>
         </ModalContent>
     </ModalRoot>;
 }

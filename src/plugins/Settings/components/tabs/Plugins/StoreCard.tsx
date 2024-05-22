@@ -58,6 +58,7 @@ export default function StoreCard({ store, isNew }: { store: PluginStore, isNew:
                     }
                 </Tooltip>
 
+                { store.name !== CORE_STORE ? 
                 <Tooltip text="Remove Store">
                     {
                         (tooltipAttr) => <Clickable
@@ -67,7 +68,7 @@ export default function StoreCard({ store, isNew }: { store: PluginStore, isNew:
                         <TrashIcon />
                     </Clickable>
                     }
-                </Tooltip>                
+                </Tooltip> : null }
             </div>
             
             <div className="storeName">
@@ -78,17 +79,11 @@ export default function StoreCard({ store, isNew }: { store: PluginStore, isNew:
                     { store.name }
                 </Text>
                 { store.name === CORE_STORE ? 
-                    <Tooltip text="This store serves as the core of skellycord">
-                        {
-                            (tooltipAttr) => <div
-                                { ...tooltipAttr }
-                                className="SC_marginRight8"
-                                style={{ color: variables.TEXT_NORMAL }}
-                                >
-                                    <Paw /> 
-                                </div>
-                        }
-                    </Tooltip>
+                    <TextBadge
+                        className="SC_marginRight8"
+                        color={colors.BRAND_500}
+                        text="Core"
+                    />
                 : null }
                 { isNew ? <TextBadge 
                     className="SC_marginRight8"
@@ -100,8 +95,7 @@ export default function StoreCard({ store, isNew }: { store: PluginStore, isNew:
             { author ? <div 
                 style={{ 
                     display: "flex"
-                }}
-            >
+                }}>
                 <Avatar
                     className="SC_marginRight8"
                     size="SIZE_20"

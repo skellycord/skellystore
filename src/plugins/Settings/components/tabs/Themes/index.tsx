@@ -29,6 +29,6 @@ export default function ThemesTab({ settings }) {
 
         <FormDivider className={joinClassNames(margins.marginBottom20, margins.marginTop20)} />
 
-        { themes.linkThemes.map(theme => <ThemeStatusCard theme={theme} />) }
+        { themes.linkThemes.map((theme, i) => <ThemeStatusCard theme={theme} key={i} themeIndex={i}/>) }
     </>;
 }

@@ -1,7 +1,7 @@
 import { themes } from "@skellycord/apis";
 import { Theme } from "@skellycord/apis/themes";
 import { joinClassNames } from "@skellycord/utils";
-import { MOD_SETTINGS, MOD_STORAGE_KEY } from "@skellycord/utils/constants";
+import { MOD_STORAGE_KEY } from "@skellycord/utils/constants";
 import { openStorage } from "@skellycord/utils/storage";
 import { getViaProps } from "@skellycord/webpack";
 import { React, megaModule } from "@skellycord/webpack/common";
@@ -78,5 +78,5 @@ export default function ThemeStatusCard({ theme, themeIndex }: { theme: Theme, t
 }
 
 function findHref(theme: Theme, i: number) {
-    return theme?.element?.href ?? openStorage(MOD_STORAGE_KEY, MOD_SETTINGS).webThemes.split("\n")[i];
+    return theme?.element?.href ?? openStorage(MOD_STORAGE_KEY).webThemes.split("\n")[i];
 }

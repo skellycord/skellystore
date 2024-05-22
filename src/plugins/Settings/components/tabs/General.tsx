@@ -5,6 +5,7 @@ import ChangelogModal from "../ChangelogModal";
 import { GUILD_DATA } from "@skellycord/utils/constants";
 import { margins } from "@skellycord/webpack/common/css";
 import { GuildStore } from "@skellycord/webpack/common/stores";
+import { exportData, importData } from "@skellycord/utils/storage/backup";
 
 
 export default function GeneralTab({ context }) {
@@ -44,7 +45,7 @@ export default function GeneralTab({ context }) {
                                 (tooltipAttr) => <Button
                                     { ...tooltipAttr }
                                     size={ButtonSizes.SMALL}
-                                    disabled={true}
+                                    disabled
                                 >
                                     Join Skellycord Server
                                 </Button>
@@ -54,7 +55,7 @@ export default function GeneralTab({ context }) {
                         <Button
                             size={ButtonSizes.SMALL}
                             onClick={() => {
-                                context.handleClose();
+                                context?.handleClose?.();
                                 openInviteWindow({ args: { code: GUILD_DATA.invite } });
                             }}
                         >
@@ -73,11 +74,24 @@ export default function GeneralTab({ context }) {
                 </Button>
                 <Button 
                     size={ButtonSizes.SMALL}
-                    onClick={() => open("https://github.com/skullbite/skellycord", "_blank")}
+                    onClick={() => open("https://github.com/skellycord/skellycord", "_blank")}
                     color={ButtonColors.GREEN} 
-                    className={margins.marginBottom8}
                 >
                     Source Code
+                </Button>
+            </div>
+            <div className={joinClassNames(buttonContainer, margins.marginBottom8)}>
+                <Button
+                    size={ButtonSizes.SMALL}
+                    onClick={importData}
+                >
+                    Import Data
+                </Button>
+                <Button
+                    size={ButtonSizes.SMALL}
+                    onClick={exportData}
+                >
+                    Export Data
                 </Button>
             </div>
         </Card>
