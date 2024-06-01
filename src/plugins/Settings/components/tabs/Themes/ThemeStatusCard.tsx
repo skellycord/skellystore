@@ -1,5 +1,5 @@
 import { themes } from "@skellycord/apis";
-import { Theme } from "@skellycord/apis/themes";
+import { LocalTheme, WebTheme } from "@skellycord/apis/themes";
 import { joinClassNames } from "@skellycord/utils";
 import { MOD_STORAGE_KEY } from "@skellycord/utils/constants";
 import { openStorage } from "@skellycord/utils/storage";
@@ -8,11 +8,12 @@ import { React, megaModule } from "@skellycord/webpack/common";
 import { colors, flexClasses, margins } from "@skellycord/webpack/common/css";
 
 enum ThemeStatus {
+    LOCAL,
     PENDING,
     OK,
     FAIL
 }
-export default function ThemeStatusCard({ theme, themeIndex }: { theme: Theme, themeIndex: number }) {
+export default function ThemeStatusCard({ theme, themeIndex }: { theme: LocalTheme | WebTheme, themeIndex: number }) {
     const { 
         Card, 
         Text,
@@ -28,13 +29,16 @@ export default function ThemeStatusCard({ theme, themeIndex }: { theme: Theme, t
     
     React.useEffect(() => {
         async function detectThemeLoad() {
-            if (theme.local) { return; } // todo: local theme logic
+            if ((theme as LocalTheme)?.path) { 
+                setThemeLoaded(ThemeStatus.PENDING);
+                return;
+            }
 
-            const ref = findHref(theme, themeIndex);
+            /* const ref = theme.element.href;
             if (ref.includes("discord.com/")) return setThemeLoaded(ThemeStatus.FAIL);
             const req = await fetch(ref);
 
-            setThemeLoaded(req.ok ? ThemeStatus.OK : ThemeStatus.FAIL);
+            setThemeLoaded(req.ok ? ThemeStatus.OK : ThemeStatus.FAIL); */
         }
 
         detectThemeLoad();
@@ -70,13 +74,9 @@ export default function ThemeStatusCard({ theme, themeIndex }: { theme: Theme, t
                     <Status { ...StatusProps} />
                 </div>
                 <div>
-                    <FormTitle className={margins.marginTop4}>{ findHref(theme, themeIndex) }</FormTitle>
+                    { /* <FormTitle className={margins.marginTop4}>{ theme?.path ?? theme?.link }</FormTitle> */ }
                 </div>
             </FormWrapperIdk>
         </Card>
     </div>;
-}
-
-function findHref(theme: Theme, i: number) {
-    return theme?.element?.href ?? openStorage(MOD_STORAGE_KEY).webThemes.split("\n")[i];
 }
